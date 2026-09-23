@@ -76,7 +76,7 @@ router.put("/:id", (req: Request<{ id: string }>, res: Response): void => {
  */
 router.patch("/:id", (req: Request<{ id: string }>, res: Response): void => {
   const paramId = Number(req.params.id);
-  const index = data.courses.findIndex((stu) => stu.id === paramId);
+  const index = data.courses.findIndex((c) => c.id === paramId);
   if (index === -1) {
     res.status(404).json({ error: `Didn't found courses with id:${paramId}` });
     return;

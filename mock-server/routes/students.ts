@@ -28,11 +28,12 @@ router.get("/:id", (req: Request<{ id: string }>, res: Response): void => {
  */
 router.post("/", (req: Request, res: Response): void => {
   const { name, lastName, courseId, year, age } = req.body;
+  //Review later
   const nextid =
     data.students.length > 0
       ? Math.max(...data.students.map((s) => s.id)) + 1
       : 1;
-  const newStudent = {
+  const newStudent: Student = {
     id: nextid,
     name,
     lastName,
@@ -51,7 +52,7 @@ router.delete("/:id", (req: Request<{ id: string }>, res: Response): void => {
   const paramId = Number(req.params.id);
   const index = data.students.findIndex((s) => s.id === paramId);
   if (index === -1) {
-    res.status(404).json({ error: `Didn't found student with ${paramId}` });
+    res.status(404).json({ error: `Didn't found student with id:${paramId}` });
     return;
   }
   res.json(...data.students.splice(index, 1));
@@ -64,7 +65,7 @@ router.put("/:id", (req: Request<{ id: string }>, res: Response): void => {
   const paramId = Number(req.params.id);
   const index = data.students.findIndex((stu) => stu.id === paramId);
   if (index === -1) {
-    res.status(404).json({ error: `Didn't found student with ${paramId}` });
+    res.status(404).json({ error: `Didn't found student with id:${paramId}` });
     return;
   }
   const { name, lastName, courseId, year, age } = req.body;
@@ -86,9 +87,10 @@ router.patch("/:id", (req: Request<{ id: string }>, res: Response): void => {
   const paramId = Number(req.params.id);
   const index = data.students.findIndex((stu) => stu.id === paramId);
   if (index === -1) {
-    res.status(404).json({ error: `Didn't found student with ${paramId}` });
+    res.status(404).json({ error: `Didn't found student with id:${paramId}` });
     return;
   }
+  //Review later
   const updatedStudent: Student = {
     ...data.students[index],
     ...req.body,

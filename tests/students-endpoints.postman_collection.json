@@ -1,0 +1,156 @@
+{
+  "info": {
+    "_postman_id": "18b65757-8088-45cc-9a7f-162c4409deaf",
+    "name": "students-endpoints",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "45905295",
+    "_collection_link": "https://go.postman.co/collection/45905295-18b65757-8088-45cc-9a7f-162c4409deaf?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "getStudents",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{BASE_URL}}/students",
+          "host": [
+            "{{BASE_URL}}"
+          ],
+          "path": [
+            "students"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "postStudents",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"name\":\"Henrique\",\r\n    \"lastName\":\"Fernandes\",\r\n    \"courseId\":1,\r\n    \"year\": 2,\r\n    \"age\":22\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{BASE_URL}}/students",
+          "host": [
+            "{{BASE_URL}}"
+          ],
+          "path": [
+            "students"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "deleteStudents",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{BASE_URL}}/students/3",
+          "host": [
+            "{{BASE_URL}}"
+          ],
+          "path": [
+            "students",
+            "3"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "putStudents",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"name\":\"Ricardo\",\r\n    \"lastName\":\"Fernandes\",\r\n    \"courseId\":1,\r\n    \"year\": 2,\r\n    \"age\":25\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{BASE_URL}}/students/2",
+          "host": [
+            "{{BASE_URL}}"
+          ],
+          "path": [
+            "students",
+            "2"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "patchStudents",
+      "request": {
+        "method": "PATCH",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"name\":\"Ricardo\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{BASE_URL}}/students/2",
+          "host": [
+            "{{BASE_URL}}"
+          ],
+          "path": [
+            "students",
+            "2"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "BASE_URL",
+      "value": ""
+    }
+  ]
+}
