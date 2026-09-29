@@ -1,16 +1,62 @@
 {
   "students": [
     {
-      "id": 1,
       "name": "Joana",
       "lastName": "Silva",
       "courseId": 1,
       "year": 2,
-      "age": 21
+      "age": 21,
+      "id": "JhtQW2d6iYU"
+    },
+    {
+      "name": "Henrique",
+      "lastName": "Fernandes",
+      "courseId": 1,
+      "year": 2,
+      "age": 22,
+      "id": "jkmW-xbB3xI"
+    },
+    {
+      "name": "Henrique",
+      "lastName": "Fernandes",
+      "courseId": 1,
+      "year": 2,
+      "age": 22,
+      "id": "YpRWSVyuTeM"
+    },
+    {
+      "name": "Henrique",
+      "lastName": "Fernandes",
+      "courseId": 1,
+      "year": 2,
+      "id": "FMEFgyRFP6E"
+    },
+    {
+      "name2": "Henrique",
+      "id": "NQQqpmxsFIQ"
     }
   ],
   "courses": [
-    { "id": 1, "courseName": "Engenharia da Computação Gráfica e Multimédia" },
-    { "id": 2, "courseName": "Engenharia de Redes e Sistemas de Computadores" }
-  ]
+    {
+      "notaMédia": 12,
+      "id": "1"
+    },
+    {
+      "courseName": "Engenharia Informática",
+      "id": "JpF3v74O4cU"
+    },
+    {
+      "courseName": "Engenharia Informática",
+      "id": "NVcdV3f07IU"
+    },
+    {
+      "courseName": "Engenharia Informática",
+      "id": "9ROesCWDxcs"
+    },
+    {
+      "courseName": "Engenharia Informática",
+      "id": "A203dWxyQOc"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
 }
