@@ -8,8 +8,12 @@ async function showStudents() {
       const newDiv = document.createElement("div");
       newDiv.textContent = `${stu.name} ${stu.lastName} ${stu.age}`;
       const deleteButton = document.createElement("button");
+      const editButton = document.createElement("button");
       deleteButton.textContent = "Apagar";
+      editButton.textContent = "Editar";
+      editButton.addEventListener("click", () => openEditStudent(stu));
       deleteButton.addEventListener("click", () => deleteStudent(stu.id));
+      newDiv.appendChild(editButton);
       newDiv.appendChild(deleteButton);
       studentsDiv.appendChild(newDiv);
     });
@@ -30,7 +34,10 @@ async function showCourses() {
       newDiv.textContent = `${c.courseName}`;
       const deleteButton = document.createElement("button");
       deleteButton.textContent = "Apagar";
+      const editButton = document.createElement("button");
+      editButton.textContent = "Editar";
       deleteButton.addEventListener("click", () => deleteCourse(c.id));
+      newDiv.appendChild(editButton);
       newDiv.appendChild(deleteButton);
       coursesDiv.appendChild(newDiv);
     });
@@ -81,6 +88,21 @@ async function deleteCourse(idCourse) {
   }
 }
 
+function openEditStudent(student) {
+  document.getElementById("newStudentForm").reset();
+  showCoursesOptions();
+  document.getElementById("studentId").value = student.id;
+  document.getElementById("studentName").value = student.name;
+  document.getElementById("studentLastname").value = student.lastName;
+  document.getElementById("studentAge").value = student.age;
+  document.getElementById("cursosSelect").value = student.courseId;
+  document.getElementById("studentYear").value = student.year;
+  document.getElementById("studentModalTitle").textContent = "Editar Aluno";
+  document.getElementById("newStudentDialog").showModal();
+  document.getElementById("studentSubmitButton").textContent = "Editar";
+  document.getElementById("newStudentDialog").showModal();
+}
+
 function initEventListeners() {
   const newStudentDialog = document.getElementById("newStudentDialog");
   const newCourseDialog = document.getElementById("newCourseDialog");
@@ -97,24 +119,6 @@ function initEventListeners() {
   const exitCourseDialogButton = document.getElementById(
     "exitCourseDialogButton",
   );
-
-  newStudentForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const formData = new FormData(newStudentForm);
-    const payload = Object.fromEntries(formData.entries());
-    try {
-      await fetch("http://localhost:3000/students", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-      newStudentDialog.close();
-      showStudents();
-    } catch (e) {
-      console.error("Fetch operation failed:", e);
-      alert("Erro ao processar o pedido. Tente novamente.");
-    }
-  });
 
   newCourseForm.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -134,9 +138,38 @@ function initEventListeners() {
     }
   });
 
+  newStudentForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const formData = new FormData(newStudentForm);
+    const payload = Object.fromEntries(formData.entries());
+    try {
+      if (payload.id) {
+        await fetch(`http://localhost:3000/students/${payload.id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+      } else {
+        await fetch(`http://localhost:3000/students/`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+      }
+      newStudentDialog.close();
+      showStudents();
+    } catch (e) {
+      console.error("Fetch operation failed:", e);
+      alert("Erro ao processar o pedido. Tente novamente.");
+    }
+  });
+
   newStudentButton.addEventListener("click", () => {
-    newStudentDialog.showModal();
+    newStudentForm.reset();
     showCoursesOptions();
+    document.getElementById("studentId").value = "";
+    document.getElementById("studentModalTitle").textContent = "Criação Aluno";
+    newStudentDialog.showModal();
   });
 
   newCourseButton.addEventListener("click", () => {

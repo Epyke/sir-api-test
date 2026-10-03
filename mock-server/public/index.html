@@ -20,19 +20,30 @@
       <form id="newStudentForm">
         <div>
           <button type="button" id="exitStudentDialogButton">X</button>
-          <h2>Criação Aluno</h2>
+          <h2 id="studentModalTitle">Criação Aluno</h2>
         </div>
+        <input type="hidden" id="studentId" name="id" />
         <div>
           <label for="name">Nome:</label>
-          <input name="name" type="text" placeholder="António" />
+          <input
+            id="studentName"
+            name="name"
+            type="text"
+            placeholder="António"
+          />
         </div>
         <div>
           <label for="lastName">Apelido:</label>
-          <input name="lastName" type="text" placeholder="Ribeiro" />
+          <input
+            id="studentLastname"
+            name="lastName"
+            type="text"
+            placeholder="Ribeiro"
+          />
         </div>
         <div>
           <label for="age">Idade:</label>
-          <input name="age" type="number" placeholder="22" />
+          <input id="studentAge" name="age" type="number" placeholder="22" />
         </div>
         <div>
           <label for="courseId">Curso:</label>
@@ -40,13 +51,13 @@
         </div>
         <div>
           <label for="year">Ano Curricular:</label>
-          <select name="year">
+          <select id="studentYear" name="year">
             <option value="1">1ºano</option>
             <option value="2">2ºano</option>
             <option value="3">3ºano</option>
           </select>
         </div>
-        <button type="submit">Criar</button>
+        <button type="submit" id="studentSubmitButton">Criar</button>
       </form>
     </dialog>
 
