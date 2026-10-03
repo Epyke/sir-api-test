@@ -21,4 +21,18 @@ async function deleteStudents(idStudent) {
   showStudents();
 }
 
+const studentDialog = document.getElementById("studentDialog");
+const courseDialog = document.getElementById("courseDialog");
+
+const studentButton = document.getElementById("studentButton");
+const courseButton = document.getElementById("couseButton");
+
+studentButton.addEventListener("click", () => {
+  studentDialog.showModal();
+});
+
+courseButton.addEventListener("click", () => {
+  courseDialog.showModal();
+});
+
 showStudents();

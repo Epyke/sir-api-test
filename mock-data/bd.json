@@ -1,39 +1,12 @@
 {
   "students": [
     {
-      "name": "Joana",
-      "lastName": "Silva",
-      "courseId": 1,
-      "year": 2,
-      "age": 21,
-      "id": "JhtQW2d6iYU"
-    },
-    {
       "name": "Henrique",
       "lastName": "Fernandes",
       "courseId": 1,
       "year": 2,
       "age": 22,
       "id": "jkmW-xbB3xI"
-    },
-    {
-      "name": "Henrique",
-      "lastName": "Fernandes",
-      "courseId": 1,
-      "year": 2,
-      "age": 22,
-      "id": "YpRWSVyuTeM"
-    },
-    {
-      "name": "Henrique",
-      "lastName": "Fernandes",
-      "courseId": 1,
-      "year": 2,
-      "id": "FMEFgyRFP6E"
-    },
-    {
-      "name2": "Henrique",
-      "id": "NQQqpmxsFIQ"
     }
   ],
   "courses": [
