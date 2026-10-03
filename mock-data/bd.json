@@ -1,34 +1,30 @@
 {
   "students": [
     {
-      "name": "Henrique",
-      "lastName": "Fernandes",
-      "courseId": 1,
-      "year": 2,
-      "age": 22,
-      "id": "jkmW-xbB3xI"
+      "name": "Sim",
+      "lastName": "2",
+      "age": "22",
+      "courseId": "9ROesCWDxcs",
+      "year": "1",
+      "id": "b_1ME7zUx0o"
+    },
+    {
+      "name": "José",
+      "lastName": "Miranda",
+      "age": "22",
+      "courseId": "9ROesCWDxcs",
+      "year": "1",
+      "id": "dBPcVa3Shsw"
     }
   ],
   "courses": [
-    {
-      "notaMédia": 12,
-      "id": "1"
-    },
-    {
-      "courseName": "Engenharia Informática",
-      "id": "JpF3v74O4cU"
-    },
-    {
-      "courseName": "Engenharia Informática",
-      "id": "NVcdV3f07IU"
-    },
     {
       "courseName": "Engenharia Informática",
       "id": "9ROesCWDxcs"
     },
     {
-      "courseName": "Engenharia Informática",
-      "id": "A203dWxyQOc"
+      "courseName": "Engenharia Aerospacial",
+      "id": "mbfhdZsKhsI"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

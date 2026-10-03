@@ -4,23 +4,65 @@
     <title>API TEST SIR</title>
   </head>
   <body>
-    <h1>Alunos:</h1>
-    <div id="alunos"></div>
-    <script src="./script.js" defer></script>
-    <div>
-      <button id="studentButton">Novo Aluno</button>
-      <button id="courseButton">Novo Curso</button>
+    <div id="students">
+      <h1>Alunos:</h1>
+      <button id="newStudentButton">Novo Aluno</button>
+      <div id="studentsList"></div>
     </div>
 
-    <dialog>
-      <form>
-        <p>Criação Aluno</p>
-        <input type="text" placeholder="Nome" /><input />
-        <input type="text" placeholder="Apelido" /><input />
-        <input type="number" placeholder="Idade" /><input />
-        <input type="text" placeholder="Curso" /><input />
-        <input type="number" placeholder="Ano Curricular" /><input />
+    <div id="courses">
+      <h1>Cursos:</h1>
+      <button id="newCourseButton">Novo Curso</button>
+      <div id="coursesList"></div>
+    </div>
+
+    <dialog id="newStudentDialog">
+      <form id="newStudentForm">
+        <div>
+          <button type="button" id="exitStudentDialogButton">X</button>
+          <h2>Criação Aluno</h2>
+        </div>
+        <div>
+          <label for="name">Nome:</label>
+          <input name="name" type="text" placeholder="António" />
+        </div>
+        <div>
+          <label for="lastName">Apelido:</label>
+          <input name="lastName" type="text" placeholder="Ribeiro" />
+        </div>
+        <div>
+          <label for="age">Idade:</label>
+          <input name="age" type="number" placeholder="22" />
+        </div>
+        <div>
+          <label for="courseId">Curso:</label>
+          <select name="courseId" id="cursosSelect"></select>
+        </div>
+        <div>
+          <label for="year">Ano Curricular:</label>
+          <select name="year">
+            <option value="1">1ºano</option>
+            <option value="2">2ºano</option>
+            <option value="3">3ºano</option>
+          </select>
+        </div>
+        <button type="submit">Criar</button>
       </form>
     </dialog>
+
+    <dialog id="newCourseDialog">
+      <form id="newCourseForm">
+        <div>
+          <button type="button" id="exitCourseDialogButton">X</button>
+          <h2>Criação Curso</h2>
+        </div>
+        <div>
+          <label for="courseName">Nome Curso:</label>
+          <input name="courseName" type="text" placeholder="Nome Curso" />
+        </div>
+        <button type="submit">Criar</button>
+      </form>
+    </dialog>
+    <script src="./script.js" defer></script>
   </body>
 </html>
