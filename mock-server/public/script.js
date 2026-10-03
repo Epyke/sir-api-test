@@ -37,6 +37,7 @@ async function showCourses() {
       const editButton = document.createElement("button");
       editButton.textContent = "Editar";
       deleteButton.addEventListener("click", () => deleteCourse(c.id));
+      editButton.addEventListener("click", () => openEditCourse(c));
       newDiv.appendChild(editButton);
       newDiv.appendChild(deleteButton);
       coursesDiv.appendChild(newDiv);
@@ -98,9 +99,17 @@ function openEditStudent(student) {
   document.getElementById("cursosSelect").value = student.courseId;
   document.getElementById("studentYear").value = student.year;
   document.getElementById("studentModalTitle").textContent = "Editar Aluno";
-  document.getElementById("newStudentDialog").showModal();
   document.getElementById("studentSubmitButton").textContent = "Editar";
   document.getElementById("newStudentDialog").showModal();
+}
+
+function openEditCourse(course) {
+  document.getElementById("newCourseForm").reset();
+  document.getElementById("courseId").value = course.id;
+  document.getElementById("courseName").value = course.courseName;
+  document.getElementById("courseModalTitle").textContent = "Editar Curso";
+  document.getElementById("courseSubmitButton").textContent = "Editar";
+  document.getElementById("newCourseDialog").showModal();
 }
 
 function initEventListeners() {
@@ -125,11 +134,19 @@ function initEventListeners() {
     const formData = new FormData(newCourseForm);
     const payload = Object.fromEntries(formData.entries());
     try {
-      await fetch("http://localhost:3000/courses", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
+      if (payload.id) {
+        await fetch(`http://localhost:3000/courses/${payload.id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+      } else {
+        await fetch("http://localhost:3000/courses", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+      }
       newCourseDialog.close();
       showCourses();
     } catch (e) {

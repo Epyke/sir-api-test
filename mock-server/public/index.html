@@ -65,13 +65,19 @@
       <form id="newCourseForm">
         <div>
           <button type="button" id="exitCourseDialogButton">X</button>
-          <h2>Criação Curso</h2>
+          <h2 id="courseModalTitle">Criação Curso</h2>
         </div>
+        <input type="hidden" id="courseId" name="id" />
         <div>
           <label for="courseName">Nome Curso:</label>
-          <input name="courseName" type="text" placeholder="Nome Curso" />
+          <input
+            id="courseName"
+            name="courseName"
+            type="text"
+            placeholder="Nome Curso"
+          />
         </div>
-        <button type="submit">Criar</button>
+        <button type="submit" id="courseSubmitButton">Criar</button>
       </form>
     </dialog>
     <script src="./script.js" defer></script>

@@ -2,7 +2,7 @@
   "students": [
     {
       "id": "b_1ME7zUx0o",
-      "name": "Sim2",
+      "name": "Sim222",
       "lastName": "2",
       "age": "222",
       "courseId": "9ROesCWDxcs",
@@ -19,12 +19,8 @@
   ],
   "courses": [
     {
-      "courseName": "Engenharia Informática",
-      "id": "9ROesCWDxcs"
-    },
-    {
-      "courseName": "Engenharia Aerospacial",
-      "id": "mbfhdZsKhsI"
+      "id": "9ROesCWDxcs",
+      "courseName": "Engenharia Informática2"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
