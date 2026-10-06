@@ -190,6 +190,7 @@ function initEventListeners() {
     showCoursesOptions();
     document.getElementById("studentId").value = "";
     document.getElementById("studentModalTitle").textContent = "Criação Aluno";
+    document.getElementById("studentSubmitButton").textContent = "Criar";
     newStudentDialog.showModal();
   });
 
