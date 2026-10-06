@@ -1,26 +1,26 @@
 {
   "students": [
     {
-      "id": "b_1ME7zUx0o",
-      "name": "Sim222",
-      "lastName": "2",
-      "age": "222",
-      "courseId": "9ROesCWDxcs",
-      "year": "1"
-    },
-    {
       "id": "4jP7EkGwjiI",
       "name": "Fernandos",
       "lastName": "Ribeiro",
       "age": "45",
       "courseId": "9ROesCWDxcs",
       "year": "2"
+    },
+    {
+      "id": "Wzp5N59a_18",
+      "name": "Antonio",
+      "lastName": "Fernando",
+      "age": "-22",
+      "courseId": "9ROesCWDxcs",
+      "year": "1"
     }
   ],
   "courses": [
     {
       "id": "9ROesCWDxcs",
-      "courseName": "Engenharia Informática2"
+      "courseName": "Engenharia Informática"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

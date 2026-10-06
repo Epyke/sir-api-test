@@ -2,11 +2,14 @@ async function showStudents() {
   try {
     const studentsDiv = document.getElementById("studentsList");
     studentsDiv.replaceChildren();
-    const response = await fetch("http://localhost:3000/students");
-    const students = await response.json();
+    const responseStudents = await fetch("http://localhost:3000/students");
+    const students = await responseStudents.json();
+    const responseCourses = await fetch("http://localhost:3000/courses");
+    const courses = await responseCourses.json();
     students.forEach((stu) => {
       const newDiv = document.createElement("div");
-      newDiv.textContent = `${stu.name} ${stu.lastName} ${stu.age}`;
+      const stuCourse = courses.find((c) => c.id === stu.courseId);
+      newDiv.textContent = `${stu.name} ${stu.lastName} ${stu.age} anos ${stuCourse.courseName}`;
       const deleteButton = document.createElement("button");
       const editButton = document.createElement("button");
       deleteButton.textContent = "Apagar";
@@ -50,6 +53,7 @@ async function showCourses() {
 
 async function showCoursesOptions() {
   const courseSelect = document.getElementById("cursosSelect");
+  courseSelect.replaceChildren();
   try {
     const response = await fetch("http://localhost:3000/courses");
     const courses = await response.json();
