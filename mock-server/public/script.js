@@ -1,110 +1,124 @@
+const BASE_URL = "http://localhost:3000";
+
+async function request(path, options = {}) {
+  const res = await fetch(`${BASE_URL}${path}`, {
+    headers: { "Content-Type": "application/json" },
+    ...options,
+  });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return res.json();
+}
+
+async function getStudents() {
+  return request("/students");
+}
+
+async function getCourses() {
+  return request("/courses");
+}
+
+async function postStudent(payload) {
+  return request("/students", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
+async function postCourse(payload) {
+  return request("/courses", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
+async function putStudents(idStudent, payload) {
+  return request(`/students/${idStudent}`, {
+    method: "PUT",
+    body: JSON.stringify(payload),
+  });
+}
+
+async function putCourses(idCourse, payload) {
+  return request(`/courses/${idCourse}`, {
+    method: "PUT",
+    body: JSON.stringify(payload),
+  });
+}
+
+async function patchStudent(idStudent, payload) {
+  return request(`/students/${idStudent}`, {
+    method: "PATCH",
+    body: JSON.stringify(payload),
+  });
+}
+
+async function deleteStudent(idStudent) {
+  return request(`/students/${idStudent}`, { method: "DELETE" });
+}
+
+async function deleteCourse(idCourse) {
+  return request(`/courses/${idCourse}`, { method: "DELETE" });
+}
+
 async function showStudents() {
-  try {
-    const studentsDiv = document.getElementById("studentsList");
-    studentsDiv.replaceChildren();
-    const responseStudents = await fetch("http://localhost:3000/students");
-    const students = await responseStudents.json();
-    const responseCourses = await fetch("http://localhost:3000/courses");
-    const courses = await responseCourses.json();
-    students.forEach((stu) => {
-      const newDiv = document.createElement("div");
-      const stuCourse = courses.find((c) => c.id === stu.courseId);
-      newDiv.textContent = `${stu.name} ${stu.lastName} | ${stu.age} anos | ${stuCourse === undefined ? "Sem Curso" : stuCourse.courseName} `;
-      const deleteButton = document.createElement("button");
-      const editButton = document.createElement("button");
-      deleteButton.textContent = "Apagar";
-      editButton.textContent = "Editar";
-      editButton.addEventListener("click", () => openEditStudent(stu));
-      deleteButton.addEventListener("click", () =>
-        handleDeleteStudents(stu.id),
-      );
-      newDiv.appendChild(editButton);
-      newDiv.appendChild(deleteButton);
-      studentsDiv.appendChild(newDiv);
-    });
-    return true;
-  } catch (e) {
-    console.error("Fetch operation failed:", e);
-    alert("Erro ao processar o pedido. Tente novamente.");
-    return false;
-  }
+  const studentsDiv = document.getElementById("studentsList");
+  studentsDiv.replaceChildren();
+  const students = await getStudents();
+  const courses = await getCourses();
+  students.forEach((stu) => {
+    const newDiv = document.createElement("div");
+    const stuCourse = courses.find((c) => c.id == stu.courseId);
+    newDiv.textContent = `${stu.name} ${stu.lastName} | ${stu.age} anos | ${stuCourse === undefined ? "Sem Curso" : stuCourse.courseName} `;
+    const deleteButton = document.createElement("button");
+    const editButton = document.createElement("button");
+    deleteButton.textContent = "Apagar";
+    editButton.textContent = "Editar";
+    editButton.addEventListener("click", () => openEditStudent(stu));
+    deleteButton.addEventListener("click", () => handleDeleteStudents(stu.id));
+    newDiv.appendChild(editButton);
+    newDiv.appendChild(deleteButton);
+    studentsDiv.appendChild(newDiv);
+  });
 }
 
 async function showCourses() {
-  try {
-    const coursesDiv = document.getElementById("coursesList");
-    coursesDiv.replaceChildren();
-    const response = await fetch("http://localhost:3000/courses");
-    const courses = await response.json();
-    courses.forEach((c) => {
-      const newDiv = document.createElement("div");
-      newDiv.textContent = `${c.courseName} `;
-      const deleteButton = document.createElement("button");
-      deleteButton.textContent = "Apagar";
-      const editButton = document.createElement("button");
-      editButton.textContent = "Editar";
-      deleteButton.addEventListener("click", () => handleDeleteCourses(c.id));
-      editButton.addEventListener("click", () => openEditCourse(c));
-      newDiv.appendChild(editButton);
-      newDiv.appendChild(deleteButton);
-      coursesDiv.appendChild(newDiv);
-    });
-  } catch (e) {
-    console.error("Fetch operation failed:", e);
-    alert("Erro ao processar o pedido. Tente novamente.");
-  }
+  const coursesDiv = document.getElementById("coursesList");
+  coursesDiv.replaceChildren();
+  const courses = await getCourses();
+  courses.forEach((c) => {
+    const newDiv = document.createElement("div");
+    newDiv.textContent = `${c.courseName} `;
+    const deleteButton = document.createElement("button");
+    deleteButton.textContent = "Apagar";
+    const editButton = document.createElement("button");
+    editButton.textContent = "Editar";
+    deleteButton.addEventListener("click", () => handleDeleteCourses(c.id));
+    editButton.addEventListener("click", () => openEditCourse(c));
+    newDiv.appendChild(editButton);
+    newDiv.appendChild(deleteButton);
+    coursesDiv.appendChild(newDiv);
+  });
 }
 
 async function showCoursesOptions() {
   const courseSelect = document.getElementById("cursosSelect");
   courseSelect.replaceChildren();
-  try {
-    const response = await fetch("http://localhost:3000/courses");
-    const courses = await response.json();
-    if (courses.length === 0) {
-      return false;
-    }
-    courses.forEach((c) => {
-      const newOption = document.createElement("option");
-      newOption.textContent = c.courseName;
-      newOption.value = c.id;
-      courseSelect.appendChild(newOption);
-    });
-    return true;
-  } catch (e) {
-    console.error("Fetch operation failed:", e);
-    alert("Erro ao processar o pedido. Tente novamente.");
+  const courses = await getCourses();
+  if (courses.length === 0) {
     return false;
   }
+  courses.forEach((c) => {
+    const newOption = document.createElement("option");
+    newOption.textContent = c.courseName;
+    newOption.value = c.id;
+    courseSelect.appendChild(newOption);
+  });
+  return true;
 }
 
-async function deleteStudent(idStudent) {
-  try {
-    await fetch(`http://localhost:3000/students/${idStudent}`, {
-      method: "DELETE",
-    });
-    showStudents();
-  } catch (e) {
-    console.error("Fetch operation failed:", e);
-    alert("Erro ao processar o pedido. Tente novamente.");
-  }
-}
-
-async function deleteCourse(idCourse) {
-  try {
-    await fetch(`http://localhost:3000/courses/${idCourse}`, {
-      method: "DELETE",
-    });
-    showCourses();
-  } catch (e) {
-    console.error("Fetch operation failed:", e);
-    alert("Erro ao processar o pedido. Tente novamente.");
-  }
-}
-
-function openEditStudent(student) {
+async function openEditStudent(student) {
   document.getElementById("newStudentForm").reset();
-  showCoursesOptions();
+  await showCoursesOptions();
   document.getElementById("studentId").value = student.id;
   document.getElementById("studentName").value = student.name;
   document.getElementById("studentLastname").value = student.lastName;
@@ -134,21 +148,21 @@ async function handleDeleteStudents(studentId) {
     return;
   }
 
-  deleteStudent(studentId);
+  await deleteStudent(studentId);
+  await showStudents();
 }
 
 async function handleDeleteCourses(courseId) {
-  const responseStudents = await fetch("http://localhost:3000/students");
-  const students = await responseStudents.json();
-  let count = 0;
+  const students = await getStudents();
+  let targetStudent = [];
   students.forEach((s) => {
     if (s.courseId == courseId) {
-      count++;
+      targetStudent.push(s);
     }
   });
   const confirmed = window.confirm(
-    count > 0
-      ? `Este curso está associado com ${count} alunos, tem a certeza que o deseja apagar ?`
+    targetStudent.length > 0
+      ? `Este curso está associado com ${targetStudent.length} alunos, tem a certeza que o deseja apagar ?`
       : "Tem a certeza que deseja apagar este curso?",
   );
 
@@ -156,10 +170,15 @@ async function handleDeleteCourses(courseId) {
     return;
   }
 
-  deleteCourse(courseId);
-  if (count > 0) {
-    showStudents();
+  await deleteCourse(courseId);
+  if (targetStudent.length > 0) {
+    //Promise.all junta as promessas do array targetStudent numa só
+    await Promise.all(
+      targetStudent.map((s) => patchStudent(s.id, { courseId: null })),
+    );
   }
+  await showCourses();
+  await showStudents();
 }
 
 function initEventListeners() {
@@ -182,23 +201,16 @@ function initEventListeners() {
   newCourseForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     const formData = new FormData(newCourseForm);
-    const payload = Object.fromEntries(formData.entries());
+    const { id, ...payload } = Object.fromEntries(formData.entries());
     try {
-      if (payload.id) {
-        await fetch(`http://localhost:3000/courses/${payload.id}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        });
+      if (id) {
+        await putCourses(id, payload);
       } else {
-        await fetch("http://localhost:3000/courses", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        });
+        await postCourse(payload);
       }
       newCourseDialog.close();
-      showCourses();
+      await showCourses();
+      await showStudents();
     } catch (e) {
       console.error("Fetch operation failed:", e);
       alert("Erro ao processar o pedido. Tente novamente.");
@@ -208,23 +220,16 @@ function initEventListeners() {
   newStudentForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     const formData = new FormData(newStudentForm);
-    const payload = Object.fromEntries(formData.entries());
+    const { id, ...payload } = Object.fromEntries(formData.entries());
+    payload.age = Number(payload.age);
     try {
-      if (payload.id) {
-        await fetch(`http://localhost:3000/students/${payload.id}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        });
+      if (id) {
+        await putStudents(id, payload);
       } else {
-        await fetch(`http://localhost:3000/students/`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        });
+        await postStudent(payload);
       }
       newStudentDialog.close();
-      showStudents();
+      await showStudents();
     } catch (e) {
       console.error("Fetch operation failed:", e);
       alert("Erro ao processar o pedido. Tente novamente.");
@@ -245,6 +250,10 @@ function initEventListeners() {
   });
 
   newCourseButton.addEventListener("click", () => {
+    newCourseForm.reset();
+    document.getElementById("courseId").value = "";
+    document.getElementById("courseModalTitle").textContent = "Criação Curso";
+    document.getElementById("courseSubmitButton").textContent = "Criar";
     newCourseDialog.showModal();
   });
 

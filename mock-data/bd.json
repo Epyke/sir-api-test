@@ -1,18 +1,26 @@
 {
   "students": [
     {
-      "id": "4jP7EkGwjiI",
       "name": "Fernandos",
       "lastName": "Ribeiro",
-      "age": "45",
+      "age": 45,
       "courseId": null,
-      "year": "2"
+      "year": "2",
+      "id": "4jP7EkGwjiI"
+    },
+    {
+      "name": "Fernando",
+      "lastName": "Sim",
+      "age": 22,
+      "courseId": "5TsWrr8t-Fg",
+      "year": "1",
+      "id": "7igRP9mBmNw"
     }
   ],
   "courses": [
     {
       "id": "5TsWrr8t-Fg",
-      "courseName": "ola"
+      "courseName": "Simm22"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
