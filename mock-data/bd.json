@@ -5,7 +5,7 @@
       "name": "Fernandos",
       "lastName": "Ribeiro",
       "age": "45",
-      "courseId": "9ROesCWDxcs",
+      "courseId": null,
       "year": "2"
     },
     {
@@ -13,15 +13,18 @@
       "name": "Antonio",
       "lastName": "Fernando",
       "age": "-22",
-      "courseId": "9ROesCWDxcs",
+      "courseId": null,
       "year": "1"
-    }
-  ],
-  "courses": [
+    },
     {
-      "id": "9ROesCWDxcs",
-      "courseName": "Engenharia Informática"
+      "id": "9Nn55q6eqCw",
+      "name": "José",
+      "lastName": "Antonio",
+      "age": "222",
+      "courseId": null,
+      "year": "2"
     }
   ],
+  "courses": [],
   "$schema": "./node_modules/json-server/schema.json"
 }
