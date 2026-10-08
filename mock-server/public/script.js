@@ -9,20 +9,24 @@ async function showStudents() {
     students.forEach((stu) => {
       const newDiv = document.createElement("div");
       const stuCourse = courses.find((c) => c.id === stu.courseId);
-      newDiv.textContent = `${stu.name} ${stu.lastName} ${stu.age} anos ${stuCourse.courseName}`;
+      newDiv.textContent = `${stu.name} ${stu.lastName} | ${stu.age} anos | ${stuCourse === undefined ? "Sem Curso" : stuCourse.courseName} `;
       const deleteButton = document.createElement("button");
       const editButton = document.createElement("button");
       deleteButton.textContent = "Apagar";
       editButton.textContent = "Editar";
       editButton.addEventListener("click", () => openEditStudent(stu));
-      deleteButton.addEventListener("click", () => deleteStudent(stu.id));
+      deleteButton.addEventListener("click", () =>
+        handleDeleteStudents(stu.id),
+      );
       newDiv.appendChild(editButton);
       newDiv.appendChild(deleteButton);
       studentsDiv.appendChild(newDiv);
     });
+    return true;
   } catch (e) {
     console.error("Fetch operation failed:", e);
     alert("Erro ao processar o pedido. Tente novamente.");
+    return false;
   }
 }
 
@@ -31,15 +35,15 @@ async function showCourses() {
     const coursesDiv = document.getElementById("coursesList");
     coursesDiv.replaceChildren();
     const response = await fetch("http://localhost:3000/courses");
-    const students = await response.json();
-    students.forEach((c) => {
+    const courses = await response.json();
+    courses.forEach((c) => {
       const newDiv = document.createElement("div");
-      newDiv.textContent = `${c.courseName}`;
+      newDiv.textContent = `${c.courseName} `;
       const deleteButton = document.createElement("button");
       deleteButton.textContent = "Apagar";
       const editButton = document.createElement("button");
       editButton.textContent = "Editar";
-      deleteButton.addEventListener("click", () => deleteCourse(c.id));
+      deleteButton.addEventListener("click", () => handleDeleteCourses(c.id));
       editButton.addEventListener("click", () => openEditCourse(c));
       newDiv.appendChild(editButton);
       newDiv.appendChild(deleteButton);
@@ -57,15 +61,20 @@ async function showCoursesOptions() {
   try {
     const response = await fetch("http://localhost:3000/courses");
     const courses = await response.json();
+    if (courses.length === 0) {
+      return false;
+    }
     courses.forEach((c) => {
       const newOption = document.createElement("option");
       newOption.textContent = c.courseName;
       newOption.value = c.id;
       courseSelect.appendChild(newOption);
     });
+    return true;
   } catch (e) {
     console.error("Fetch operation failed:", e);
     alert("Erro ao processar o pedido. Tente novamente.");
+    return false;
   }
 }
 
@@ -114,6 +123,43 @@ function openEditCourse(course) {
   document.getElementById("courseModalTitle").textContent = "Editar Curso";
   document.getElementById("courseSubmitButton").textContent = "Editar";
   document.getElementById("newCourseDialog").showModal();
+}
+
+async function handleDeleteStudents(studentId) {
+  const confirmed = window.confirm(
+    "Tem a certeza que deseja apagar este estudante?",
+  );
+
+  if (!confirmed) {
+    return;
+  }
+
+  deleteStudent(studentId);
+}
+
+async function handleDeleteCourses(courseId) {
+  const responseStudents = await fetch("http://localhost:3000/students");
+  const students = await responseStudents.json();
+  let count = 0;
+  students.forEach((s) => {
+    if (s.courseId == courseId) {
+      count++;
+    }
+  });
+  const confirmed = window.confirm(
+    count > 0
+      ? `Este curso está associado com ${count} alunos, tem a certeza que o deseja apagar ?`
+      : "Tem a certeza que deseja apagar este curso?",
+  );
+
+  if (!confirmed) {
+    return;
+  }
+
+  deleteCourse(courseId);
+  if (count > 0) {
+    showStudents();
+  }
 }
 
 function initEventListeners() {
@@ -185,9 +231,13 @@ function initEventListeners() {
     }
   });
 
-  newStudentButton.addEventListener("click", () => {
+  newStudentButton.addEventListener("click", async () => {
     newStudentForm.reset();
-    showCoursesOptions();
+    const hasCourses = await showCoursesOptions();
+    if (!hasCourses) {
+      alert("Não há cursos disponiveis, crie um primeiro e tente novamente.");
+      return;
+    }
     document.getElementById("studentId").value = "";
     document.getElementById("studentModalTitle").textContent = "Criação Aluno";
     document.getElementById("studentSubmitButton").textContent = "Criar";

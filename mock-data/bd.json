@@ -7,24 +7,13 @@
       "age": "45",
       "courseId": null,
       "year": "2"
-    },
-    {
-      "id": "Wzp5N59a_18",
-      "name": "Antonio",
-      "lastName": "Fernando",
-      "age": "-22",
-      "courseId": null,
-      "year": "1"
-    },
-    {
-      "id": "9Nn55q6eqCw",
-      "name": "José",
-      "lastName": "Antonio",
-      "age": "222",
-      "courseId": null,
-      "year": "2"
     }
   ],
-  "courses": [],
+  "courses": [
+    {
+      "id": "5TsWrr8t-Fg",
+      "courseName": "ola"
+    }
+  ],
   "$schema": "./node_modules/json-server/schema.json"
 }
