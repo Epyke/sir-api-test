@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:5001";
+const BASE_URL = "https://sir-api-test.onrender.com";
 
 async function request(path, options = {}) {
   const res = await fetch(`${BASE_URL}${path}`, {
