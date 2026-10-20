@@ -5,94 +5,112 @@ const router = express.Router();
 /**
  * GET /students
  */
-router.get("/", (req, res) => {
-  res.json(Students.find());
+router.get("/", async (req, res) => {
+  try {
+    const students = await Students.find();
+    res.json(students);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 /**
  * GET /students/:id
  */
-router.get("/:id", (req, res) => {
-  const paramId = Number(req.params.id);
-  const stu = Students.findById(paramId);
-  if (stu) {
+router.get("/:id", async (req, res) => {
+  try {
+    const stu = await Students.findById(req.params.id);
+    if (!stu) {
+      res
+        .status(404)
+        .json({ error: `Didn't found student with id:${req.params.id}` });
+      return;
+    }
     res.json(stu);
-    return;
+  } catch (err) {
+    res.status(400).json({ error: err.message });
   }
-  res.status(404).json({ error: `Didn't found student with id:${paramId}` });
 });
 
 /**
  * POST /students
  */
-router.post("/", (req, res) => {
-  const { name, lastName, courseId, year, age } = req.body;
-  //Review later
-  const nextid =
-    Students.length > 0 ? Math.max(...Students.map((s) => s.id)) + 1 : 1;
-  const newStudent = {
-    id: nextid,
-    name,
-    lastName,
-    courseId,
-    year,
-    age,
-  };
-  Students.create(newStudent);
-  res.status(201).json(newStudent);
+router.post("/", async (req, res) => {
+  try {
+    const { name, lastName, courseId, year, age } = req.body;
+    const newStudent = await Students.create({
+      name,
+      lastName,
+      courseId,
+      year,
+      age,
+    });
+    res.status(201).json(newStudent);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
 });
 
 /**
  * DELETE /students/:id
  */
-router.delete("/:id", (req, res) => {
-  const paramId = Number(req.params.id);
-  const index = Students.findByIdAndDelete(paramId);
-  if (index === -1) {
-    res.status(404).json({ error: `Didn't found student with id:${paramId}` });
-    return;
+router.delete("/:id", async (req, res) => {
+  try {
+    const deleted = await Students.findByIdAndDelete(req.params.id);
+    if (!deleted) {
+      res
+        .status(404)
+        .json({ error: `Didn't found student with id:${req.params.id}` });
+      return;
+    }
+    res.json(deleted);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
   }
-  res.json(...Students.splice(index, 1));
 });
 
 /**
  * PUT /students/:id
  */
-router.put("/:id", (req, res) => {
-  const paramId = Number(req.params.id);
-  const index = Students.findIndex((stu) => stu.id === paramId);
-  if (index === -1) {
-    res.status(404).json({ error: `Didn't found student with id:${paramId}` });
-    return;
+router.put("/:id", async (req, res) => {
+  try {
+    const { name, lastName, courseId, year, age } = req.body;
+    const replaced = await Students.findOneAndReplace(
+      { _id: req.params.id },
+      { name, lastName, courseId, year, age },
+      { new: true, runValidators: true },
+    );
+    if (!replaced) {
+      res
+        .status(404)
+        .json({ error: `Didn't found student with id:${req.params.id}` });
+      return;
+    }
+    res.json(replaced);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
   }
-  const { name, lastName, courseId, year, age } = req.body;
-  Students[index] = {
-    id: paramId,
-    name,
-    lastName,
-    courseId,
-    year,
-    age,
-  };
-  res.json(Students.findOneAndReplace(paramId));
 });
 
 /**
  * PATCH /students/:id
  */
-router.patch("/:id", (req, res) => {
-  const paramId = Number(req.params.id);
-  const index = Students.findIndex((stu) => stu.id === paramId);
-  if (index === -1) {
-    res.status(404).json({ error: `Didn't found student with id:${paramId}` });
-    return;
+router.patch("/:id", async (req, res) => {
+  try {
+    const updated = await Students.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+    if (!updated) {
+      res
+        .status(404)
+        .json({ error: `Didn't found student with id:${req.params.id}` });
+      return;
+    }
+    res.json(updated);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
   }
-  //Review later
-  const updatedStudent = {
-    ...Students[index],
-    ...req.body,
-    id: Students[index].id,
-  };
-  res.json(findByIdAndUpdate(paramId, updatedStudent));
 });
+
 export default router;

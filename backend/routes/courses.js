@@ -5,86 +5,106 @@ const router = express.Router();
 /**
  * GET /courses
  */
-router.get("/", (req, res) => {
-  res.json(Courses);
+router.get("/", async (req, res) => {
+  try {
+    const courses = await Courses.find();
+    res.json(courses);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 /**
  * GET /courses/:id
  */
-router.get("/:id", (req, res) => {
-  const paramId = Number(req.params.id);
-  const targetCourse = Courses.find((c) => c.id === paramId);
-  if (targetCourse) {
+router.get("/:id", async (req, res) => {
+  try {
+    const targetCourse = await Courses.findById(req.params.id);
+    if (!targetCourse) {
+      res
+        .status(404)
+        .json({ error: `Didn't found course with id:${req.params.id}` });
+      return;
+    }
     res.json(targetCourse);
-    return;
+  } catch (err) {
+    res.status(400).json({ error: err.message });
   }
-  res.status(404).json({ error: `Didn't found course with id:${paramId}` });
 });
 
 /**
  * POST /courses
  */
-router.post("/", (req, res) => {
-  const { courseName } = req.body;
-  const nextid =
-    Courses.length > 0 ? Math.max(...Courses.map((s) => s.id)) + 1 : 1;
-  const newCourse = {
-    id: nextid,
-    courseName,
-  };
-  Courses.push(newCourse);
-  res.status(201).json(newCourse);
+router.post("/", async (req, res) => {
+  try {
+    const { name } = req.body;
+    const newCourse = await Courses.create({ name });
+    res.status(201).json(newCourse);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
 });
 
 /**
  * DELETE /courses/:id
  */
-router.delete("/:id", (req, res) => {
-  const paramId = Number(req.params.id);
-  const index = Courses.findIndex((s) => s.id === paramId);
-  if (index === -1) {
-    res.status(404).json({ error: `Didn't found course with id:${paramId}` });
-    return;
+router.delete("/:id", async (req, res) => {
+  try {
+    const deleted = await Courses.findByIdAndDelete(req.params.id);
+    if (!deleted) {
+      res
+        .status(404)
+        .json({ error: `Didn't found course with id:${req.params.id}` });
+      return;
+    }
+    res.json(deleted);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
   }
-  res.json(...Courses.splice(index, 1));
 });
 
 /**
  * PUT /courses/:id
  */
-router.put("/:id", (req, res) => {
-  const paramId = Number(req.params.id);
-  const index = Courses.findIndex((c) => c.id === paramId);
-  if (index === -1) {
-    res.status(404).json({ error: `Didn't found course with id:${paramId}` });
-    return;
+router.put("/:id", async (req, res) => {
+  try {
+    const { name } = req.body;
+    const replaced = await Courses.findOneAndReplace(
+      { _id: req.params.id },
+      { name },
+      { new: true, runValidators: true },
+    );
+    if (!replaced) {
+      res
+        .status(404)
+        .json({ error: `Didn't found course with id:${req.params.id}` });
+      return;
+    }
+    res.json(replaced);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
   }
-  const { courseName } = req.body;
-  Courses[index] = {
-    id: paramId,
-    courseName,
-  };
-  res.json(Courses[index]);
 });
 
 /**
  * PATCH /courses/:id
  */
-router.patch("/:id", (req, res) => {
-  const paramId = Number(req.params.id);
-  const index = Courses.findIndex((c) => c.id === paramId);
-  if (index === -1) {
-    res.status(404).json({ error: `Didn't found courses with id:${paramId}` });
-    return;
+router.patch("/:id", async (req, res) => {
+  try {
+    const updated = await Courses.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+    if (!updated) {
+      res
+        .status(404)
+        .json({ error: `Didn't found course with id:${req.params.id}` });
+      return;
+    }
+    res.json(updated);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
   }
-  const updatedCourse = {
-    ...Courses[index],
-    ...req.body,
-    id: Courses[index].id,
-  };
-  Courses[index] = updatedCourse;
-  res.json(updatedCourse);
 });
 
 export default router;
