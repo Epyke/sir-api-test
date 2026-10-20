@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:3000";
+const BASE_URL = "http://localhost:5001";
 
 async function request(path, options = {}) {
   const res = await fetch(`${BASE_URL}${path}`, {
@@ -67,14 +67,14 @@ async function showStudents() {
   const courses = await getCourses();
   students.forEach((stu) => {
     const newDiv = document.createElement("div");
-    const stuCourse = courses.find((c) => c.id == stu.courseId);
+    const stuCourse = courses.find((c) => c._id == stu.courseId);
     newDiv.textContent = `${stu.name} ${stu.lastName} | ${stu.age} anos | ${stuCourse === undefined ? "Sem Curso" : stuCourse.courseName} `;
     const deleteButton = document.createElement("button");
     const editButton = document.createElement("button");
     deleteButton.textContent = "Apagar";
     editButton.textContent = "Editar";
     editButton.addEventListener("click", () => openEditStudent(stu));
-    deleteButton.addEventListener("click", () => handleDeleteStudents(stu.id));
+    deleteButton.addEventListener("click", () => handleDeleteStudents(stu._id));
     newDiv.appendChild(editButton);
     newDiv.appendChild(deleteButton);
     studentsDiv.appendChild(newDiv);
@@ -92,7 +92,7 @@ async function showCourses() {
     deleteButton.textContent = "Apagar";
     const editButton = document.createElement("button");
     editButton.textContent = "Editar";
-    deleteButton.addEventListener("click", () => handleDeleteCourses(c.id));
+    deleteButton.addEventListener("click", () => handleDeleteCourses(c._id));
     editButton.addEventListener("click", () => openEditCourse(c));
     newDiv.appendChild(editButton);
     newDiv.appendChild(deleteButton);
@@ -110,7 +110,7 @@ async function showCoursesOptions() {
   courses.forEach((c) => {
     const newOption = document.createElement("option");
     newOption.textContent = c.courseName;
-    newOption.value = c.id;
+    newOption.value = c._id;
     courseSelect.appendChild(newOption);
   });
   return true;
@@ -119,7 +119,7 @@ async function showCoursesOptions() {
 async function openEditStudent(student) {
   document.getElementById("newStudentForm").reset();
   await showCoursesOptions();
-  document.getElementById("studentId").value = student.id;
+  document.getElementById("studentId").value = student._id;
   document.getElementById("studentName").value = student.name;
   document.getElementById("studentLastname").value = student.lastName;
   document.getElementById("studentAge").value = student.age;
@@ -132,7 +132,7 @@ async function openEditStudent(student) {
 
 function openEditCourse(course) {
   document.getElementById("newCourseForm").reset();
-  document.getElementById("courseId").value = course.id;
+  document.getElementById("courseId").value = course._id;
   document.getElementById("courseName").value = course.courseName;
   document.getElementById("courseModalTitle").textContent = "Editar Curso";
   document.getElementById("courseSubmitButton").textContent = "Editar";
@@ -174,7 +174,7 @@ async function handleDeleteCourses(courseId) {
   if (targetStudent.length > 0) {
     //Promise.all junta as promessas do array targetStudent numa só
     await Promise.all(
-      targetStudent.map((s) => patchStudent(s.id, { courseId: null })),
+      targetStudent.map((s) => patchStudent(s._id, { courseId: null })),
     );
   }
   await showCourses();
