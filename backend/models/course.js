@@ -2,7 +2,7 @@ import { Schema, model } from "mongoose";
 
 const courseSchema = new Schema(
   {
-    name: { type: String, required: true },
+    courseName: { type: String, required: true },
   },
   { timestamps: true },
 );

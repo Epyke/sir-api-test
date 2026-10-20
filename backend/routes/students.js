@@ -78,7 +78,7 @@ router.put("/:id", async (req, res) => {
     const replaced = await Students.findOneAndReplace(
       { _id: req.params.id },
       { name, lastName, courseId, year, age },
-      { new: true, runValidators: true },
+      { returnDocument: "after", runValidators: true },
     );
     if (!replaced) {
       res
@@ -98,7 +98,7 @@ router.put("/:id", async (req, res) => {
 router.patch("/:id", async (req, res) => {
   try {
     const updated = await Students.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
+      returnDocument: "after",
       runValidators: true,
     });
     if (!updated) {

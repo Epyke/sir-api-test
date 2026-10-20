@@ -9,7 +9,7 @@ const studentSchema = new Schema(
     courseId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "courses",
-      required: true,
+      default: null,
     },
     year: { type: Number, required: true },
   },

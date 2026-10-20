@@ -37,8 +37,8 @@ router.get("/:id", async (req, res) => {
  */
 router.post("/", async (req, res) => {
   try {
-    const { name } = req.body;
-    const newCourse = await Courses.create({ name });
+    const { courseName } = req.body;
+    const newCourse = await Courses.create({ courseName });
     res.status(201).json(newCourse);
   } catch (err) {
     res.status(400).json({ error: err.message });
@@ -68,11 +68,11 @@ router.delete("/:id", async (req, res) => {
  */
 router.put("/:id", async (req, res) => {
   try {
-    const { name } = req.body;
+    const { courseName } = req.body;
     const replaced = await Courses.findOneAndReplace(
       { _id: req.params.id },
-      { name },
-      { new: true, runValidators: true },
+      { courseName },
+      { returnDocument: "after", runValidators: true },
     );
     if (!replaced) {
       res
@@ -92,7 +92,7 @@ router.put("/:id", async (req, res) => {
 router.patch("/:id", async (req, res) => {
   try {
     const updated = await Courses.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
+      returnDocument: "after",
       runValidators: true,
     });
     if (!updated) {
