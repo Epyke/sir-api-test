@@ -1,12 +1,12 @@
 import express from "express";
-import data from "../../mock-data/bd.json" with { type: "json" };
+import { Courses } from "../models/course.js";
 const router = express.Router();
 
 /**
  * GET /courses
  */
 router.get("/", (req, res) => {
-  res.json(data.courses);
+  res.json(Courses);
 });
 
 /**
@@ -14,7 +14,7 @@ router.get("/", (req, res) => {
  */
 router.get("/:id", (req, res) => {
   const paramId = Number(req.params.id);
-  const targetCourse = data.courses.find((c) => c.id === paramId);
+  const targetCourse = Courses.find((c) => c.id === paramId);
   if (targetCourse) {
     res.json(targetCourse);
     return;
@@ -28,14 +28,12 @@ router.get("/:id", (req, res) => {
 router.post("/", (req, res) => {
   const { courseName } = req.body;
   const nextid =
-    data.courses.length > 0
-      ? Math.max(...data.courses.map((s) => s.id)) + 1
-      : 1;
+    Courses.length > 0 ? Math.max(...Courses.map((s) => s.id)) + 1 : 1;
   const newCourse = {
     id: nextid,
     courseName,
   };
-  data.courses.push(newCourse);
+  Courses.push(newCourse);
   res.status(201).json(newCourse);
 });
 
@@ -44,12 +42,12 @@ router.post("/", (req, res) => {
  */
 router.delete("/:id", (req, res) => {
   const paramId = Number(req.params.id);
-  const index = data.courses.findIndex((s) => s.id === paramId);
+  const index = Courses.findIndex((s) => s.id === paramId);
   if (index === -1) {
     res.status(404).json({ error: `Didn't found course with id:${paramId}` });
     return;
   }
-  res.json(...data.courses.splice(index, 1));
+  res.json(...Courses.splice(index, 1));
 });
 
 /**
@@ -57,17 +55,17 @@ router.delete("/:id", (req, res) => {
  */
 router.put("/:id", (req, res) => {
   const paramId = Number(req.params.id);
-  const index = data.courses.findIndex((c) => c.id === paramId);
+  const index = Courses.findIndex((c) => c.id === paramId);
   if (index === -1) {
     res.status(404).json({ error: `Didn't found course with id:${paramId}` });
     return;
   }
   const { courseName } = req.body;
-  data.courses[index] = {
+  Courses[index] = {
     id: paramId,
     courseName,
   };
-  res.json(data.courses[index]);
+  res.json(Courses[index]);
 });
 
 /**
@@ -75,17 +73,17 @@ router.put("/:id", (req, res) => {
  */
 router.patch("/:id", (req, res) => {
   const paramId = Number(req.params.id);
-  const index = data.courses.findIndex((c) => c.id === paramId);
+  const index = Courses.findIndex((c) => c.id === paramId);
   if (index === -1) {
     res.status(404).json({ error: `Didn't found courses with id:${paramId}` });
     return;
   }
   const updatedCourse = {
-    ...data.courses[index],
+    ...Courses[index],
     ...req.body,
-    id: data.courses[index].id,
+    id: Courses[index].id,
   };
-  data.courses[index] = updatedCourse;
+  Courses[index] = updatedCourse;
   res.json(updatedCourse);
 });
 

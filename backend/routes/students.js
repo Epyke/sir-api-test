@@ -1,12 +1,12 @@
 import express from "express";
-import data from "../../mock-data/bd.json" with { type: "json" };
+import { Students } from "../models/student.js";
 const router = express.Router();
 
 /**
  * GET /students
  */
 router.get("/", (req, res) => {
-  res.json(data.students);
+  res.json(Students.find());
 });
 
 /**
@@ -14,7 +14,7 @@ router.get("/", (req, res) => {
  */
 router.get("/:id", (req, res) => {
   const paramId = Number(req.params.id);
-  const stu = data.students.find((stu) => stu.id === paramId);
+  const stu = Students.findById(paramId);
   if (stu) {
     res.json(stu);
     return;
@@ -29,9 +29,7 @@ router.post("/", (req, res) => {
   const { name, lastName, courseId, year, age } = req.body;
   //Review later
   const nextid =
-    data.students.length > 0
-      ? Math.max(...data.students.map((s) => s.id)) + 1
-      : 1;
+    Students.length > 0 ? Math.max(...Students.map((s) => s.id)) + 1 : 1;
   const newStudent = {
     id: nextid,
     name,
@@ -40,7 +38,7 @@ router.post("/", (req, res) => {
     year,
     age,
   };
-  data.students.push(newStudent);
+  Students.create(newStudent);
   res.status(201).json(newStudent);
 });
 
@@ -49,12 +47,12 @@ router.post("/", (req, res) => {
  */
 router.delete("/:id", (req, res) => {
   const paramId = Number(req.params.id);
-  const index = data.students.findIndex((s) => s.id === paramId);
+  const index = Students.findByIdAndDelete(paramId);
   if (index === -1) {
     res.status(404).json({ error: `Didn't found student with id:${paramId}` });
     return;
   }
-  res.json(...data.students.splice(index, 1));
+  res.json(...Students.splice(index, 1));
 });
 
 /**
@@ -62,13 +60,13 @@ router.delete("/:id", (req, res) => {
  */
 router.put("/:id", (req, res) => {
   const paramId = Number(req.params.id);
-  const index = data.students.findIndex((stu) => stu.id === paramId);
+  const index = Students.findIndex((stu) => stu.id === paramId);
   if (index === -1) {
     res.status(404).json({ error: `Didn't found student with id:${paramId}` });
     return;
   }
   const { name, lastName, courseId, year, age } = req.body;
-  data.students[index] = {
+  Students[index] = {
     id: paramId,
     name,
     lastName,
@@ -76,7 +74,7 @@ router.put("/:id", (req, res) => {
     year,
     age,
   };
-  res.json(data.students[index]);
+  res.json(Students.findOneAndReplace(paramId));
 });
 
 /**
@@ -84,18 +82,17 @@ router.put("/:id", (req, res) => {
  */
 router.patch("/:id", (req, res) => {
   const paramId = Number(req.params.id);
-  const index = data.students.findIndex((stu) => stu.id === paramId);
+  const index = Students.findIndex((stu) => stu.id === paramId);
   if (index === -1) {
     res.status(404).json({ error: `Didn't found student with id:${paramId}` });
     return;
   }
   //Review later
   const updatedStudent = {
-    ...data.students[index],
+    ...Students[index],
     ...req.body,
-    id: data.students[index].id,
+    id: Students[index].id,
   };
-  data.students[index] = updatedStudent;
-  res.json(updatedStudent);
+  res.json(findByIdAndUpdate(paramId, updatedStudent));
 });
 export default router;
