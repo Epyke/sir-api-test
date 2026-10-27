@@ -13,6 +13,8 @@ app.use(cors());
 app.use("/students", studentsRoutes);
 app.use("/courses", coursesRoutes);
 
+app.get("/health", (req, res) => res.json({ status: "ok" }));
+
 async function startServer() {
   try {
     const conn = await mongoose.connect(process.env.MONGODB_URI);

@@ -266,6 +266,27 @@ function initEventListeners() {
   });
 }
 
-initEventListeners();
-showStudents();
-showCourses();
+async function waitForServer() {
+  const banner = document.getElementById("wakeBanner");
+  const timer = setTimeout(() => (banner.hidden = false), 2000);
+
+  while (true) {
+    try {
+      const res = await fetch(`${BASE_URL}/health`);
+      if (res.ok) break;
+    } catch (e) {}
+    await new Promise((r) => setTimeout(r, 3000));
+  }
+
+  clearTimeout(timer);
+  banner.hidden = true;
+}
+
+async function init() {
+  initEventListeners();
+  await waitForServer();
+  await showStudents();
+  await showCourses();
+}
+
+init();
